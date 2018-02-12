@@ -1,0 +1,14 @@
+<div class="course-container">
+  <!-- Event Bus experiments dodajemy dwa koponenty
+  do interakcji miedzy komponentami bedziemy uzywac
+  global event bus -->
+  <h2>Event Bus Experiments</h2>
+  <lesson-counter></lesson-counter>
+  <lessons-list></lessons-list>
+  <input #input>
+  <button 
+    class="button button-highlight"
+    (click)="addLesson(input.value)"
+    >Add Lesson
+</button>
+</div>
