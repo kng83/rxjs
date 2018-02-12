@@ -11,4 +11,6 @@ spowduje to wgranie plikow oraz utworzenie yarn.lock
 
 //w angular cli mozemy zmienic "prefix": "", (normalinie bylo "prefix": "app",); bedziemy mieli nazwy wtedy bez tego app;
 
-//
+
+//git push https://github.com/kng83/rxjs --all -wyslanie gitem wszystkich galezi
+//git push -d origin OberverChange -usuniecie galezi zdalnej

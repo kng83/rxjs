@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { globalEventBus, Observer } from '../event-bus-experiments/event-bus';
+import { globalEventBus, Observer, LESSON_LIST_AVAILABLE } from '../event-bus-experiments/event-bus';
 import { Lesson } from '../shared/model/lesson';
 
 @Component({
@@ -13,7 +13,7 @@ export class LessonsListComponent implements OnInit, Observer {
   lessons: Lesson[] = [];
   constructor() {
     // dlatego serwisy daje sie do konstruktora
-    globalEventBus.registerObserver(this);
+    globalEventBus.registerObserver(LESSON_LIST_AVAILABLE, this);
   }
 
   ngOnInit() {

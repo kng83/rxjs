@@ -18,43 +18,49 @@ export interface Observer {
 
 interface Subject {
     // dodajemy eventType by sprecyzowac jakiego typu jest
-    // nasz event
-    registerObserver( string , obs: Observer);
-    unregisterObserver( string , obs: Observer); // usubscribe
-    notifyObserver( string , data: any); // bedzie uzywala danych ktore bedziemy brodcatowac do innnych
+    // nasz event. Bedziemy mieli dzieki temu rozne tablice w 
+    // zaleznosci od klucza
+    registerObserver(eventType: string, obs: Observer);
+    unregisterObserver(eventType: string, obs: Observer); // usubscribe
+    notifyObserver(eventType: string, data: any); // bedzie uzywala danych ktore bedziemy brodcatowac do innnych
 }
 
 class EventBus implements Subject {
-    private observers: Observer[] = [];
+    // Zmieniamy teraz Observera na obiekt map bedziemy
+    // mieli pary klucz wartosc gdzie wartosc bedzie nasza
+    // tablica
+    private observers: { [key: string]: Observer[] } = {};
 
 
-    registerObserver(obs: Observer) {
+    registerObserver(eventType: string, obs: Observer) {
         // wrzucamy do tablicy observera ktorego otrzymalismy
-        this.observers.push(obs);
+        // dodajemy tutaj klucz eventu i bedziemy mogli miec
+        // roznych obserwatorow w zaleznosci od eventu
+        this.observersPerEventType(eventType).push(obs);
     }
-    unregisterObserver(obs: Observer) {
-        // aby teraz wyjac naszego observera uzyjemy lodasha
-        // remove usuwa nam wybrany element tablicy predicate
-        // to twierdzic. Usuwa element gdy rowna sie obs;
-        //    _.remove(this.observers, (el) => {
-        //    return el === obs;
-        // }) to to samo
-        _.remove(this.observers, el => el === obs);
+    unregisterObserver(eventType: string, obs: Observer) {
+
+        _.remove(this.observersPerEventType(eventType) , el => el === obs);
     }
-    notifyObserver(data: any) {
-        // dla kazdego elementu robimy notifikacje
-        // to zawiadomienie, powiadomienie kogos innego
-        // o jakims fakcie. Tutaj notify to tylko interfejs
-        // dla kazdego obserwatora sa wysylane dane forEach
-        // te dane z Obserwatora zawiadamiajacego trafiaja do
-        // innych obserwatorow. Kazdy z obserwatorow dosteje
-        // egzemplarz tej funkcji.
+    notifyObserver(eventType: string, data: any) {
+
         // Wlasciwie tutaj dostajemy wskaznik do klasy
         // komponentu i wywolujemy jego funkcje z naszymi danymi
         // bo LessonListComponent jest przekazywany this i takimi
         // trafem te dane trafiaja do  naszego komponentu
         console.log(this.observers);
-        this.observers.forEach(obs => obs.notify(data));
+        this.observersPerEventType(eventType).forEach(obs => obs.notify(data));
+    }
+
+    // dodajemy tu funkcje ktora bedzia nam robila mapowanie
+    // klucz na Observer []. Observatorzy przez klucz.
+
+    private observersPerEventType(eventType: string): Observer[] {
+        const observersPerType = this.observers[eventType];
+        if (!observersPerType) {
+            this.observers[eventType] = [];
+        }
+        return this.observers[eventType];
     }
 
 }

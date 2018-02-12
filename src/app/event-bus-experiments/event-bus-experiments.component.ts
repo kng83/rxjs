@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { globalEventBus } from './event-bus';
+import { globalEventBus, LESSON_LIST_AVAILABLE } from './event-bus';
 import { testLessons } from '../shared/model/test-lessons';
 
 @Component({
@@ -14,12 +14,13 @@ export class EventBusExperimentsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    // typ robimy brodcast lesson-list, czyli jezeli nam
-    // sie zaladuje ten koponent to bedzie rozglaszal brodcatsowo
-    // informacje
+
     //  ten tutaj rozglasza (zawiadamia) Obserwator zawiadamiajacy
+    // dodajemy klucz informujacy ze to beda listy dostepne
+    // scliem damy tu kopie
     console.log('Top level component broadcasted all lessons');
-    globalEventBus.notifyObserver(testLessons);
+    globalEventBus.notifyObserver(LESSON_LIST_AVAILABLE,
+       testLessons.slice(0));
   }
 
 }
